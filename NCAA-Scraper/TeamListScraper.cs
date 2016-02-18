@@ -19,6 +19,8 @@ namespace NCAA_Scraper
 		protected override void ProcessResult(object sender, EventArgs e)
 		{
 			var result = JsonConvert.DeserializeObject<List<TeamModel>>(scrapResult);
-		}
+			var playerScraper = new PlayerListScraper(result);
+			playerScraper.RunScrap();
+        }
     }
 }

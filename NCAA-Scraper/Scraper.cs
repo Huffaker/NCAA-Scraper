@@ -37,6 +37,7 @@ namespace NCAA_Scraper
 			browser.WaitForComplete();
 			//Get text
 			var result = browser.Eval(javascriptCode);
+			browser.Close();
 			return result;
 		}
 

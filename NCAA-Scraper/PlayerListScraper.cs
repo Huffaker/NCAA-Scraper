@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NCAA_Scraper.Models;
+using Newtonsoft.Json;
 
 namespace NCAA_Scraper
 {
@@ -20,7 +21,8 @@ namespace NCAA_Scraper
 			if (_teamList.Count == 0)
 				throw new Exception("No Teams Provided");
 
-			url = "http://stats.ncaa.org/team/" + _teamList[TeamIndex].TeamID + "/stats/" + Program.YearList[YearIndex];
+			url = "http://stats.ncaa.org/team/" + _teamList[TeamIndex].TeamID + "/stats/" + Program.YearList[YearIndex].YearCode;
+			javascriptCode = "var results = [];var runLoop = function() {$($('tbody')[1]).find('a').each(function(index, i) {results.push({ PlayerID: $(i).attr('href').split('stats_player_seq=')[1], PlayerName: $(i).text() });});return results;};JSON.stringify(runLoop());";
 		}
 
 		public void LoadPlayer(string teamID, string yearCode)
@@ -29,7 +31,16 @@ namespace NCAA_Scraper
 		}
         protected override void ProcessResult(object sender, EventArgs e)
 		{
-			throw new NotImplementedException();
+			var result = JsonConvert.DeserializeObject<List<PlayerModel>>(scrapResult);
+	        if (result == null)
+		        return;
+	        foreach (var player in result)
+	        {
+		        player.YearCode = Program.YearList[YearIndex].YearCode;
+		        player.TeamID = _teamList[TeamIndex].TeamID;
+	        }
+			_playerList.AddRange(result);
+
 		}
 	}
 }
