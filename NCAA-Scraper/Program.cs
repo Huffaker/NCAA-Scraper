@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NCAA_Scraper.Models;
 
@@ -9,12 +10,19 @@ namespace NCAA_Scraper
 {
 	class Program
 	{
+		[STAThread]
 		static void Main(string[] args)
 		{
 			var teamScraper = new TeamListScraper();
-			teamScraper.RunScrap();
+			var teamList = teamScraper.TeamList;
+
+			var playerScraper = new PlayerListScraper(teamList, YearList);
+			var playerList = playerScraper.PlayerList;
+
+
 		}
 
+		//Comment out the seasons you don't need
 		public static List<YearModel> YearList = new List<YearModel>
 		{
 			new YearModel() {YearCode = 12260, SeasonName = "2015-2016"},

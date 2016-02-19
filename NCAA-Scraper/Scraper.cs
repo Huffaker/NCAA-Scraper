@@ -3,44 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using WatiN.Core;
 
 namespace NCAA_Scraper
 {
 	public abstract class Scraper
 	{
-		protected string scrapResult;
-		protected string url;
-		protected string javascriptCode;
-		private event EventHandler ThreadDone;
+		protected string scrapResult { get; set; }
+		protected string javascriptCode { get; set; }
+		private IE browser;
 
-		public void RunScrap()
+		public void RunScrap(string url)
 		{
-            var newThread = new Thread(ScrapInit);
-			newThread.SetApartmentState(ApartmentState.STA);
-			ThreadDone += ProcessResult;
-			newThread.Start();
-		}
-
-		private void ScrapInit()
-		{
+			// Create an instance of IE browser 
+			if (browser == null)
+				browser = new IE();
 			scrapResult = AquireText(url, javascriptCode);
-			ThreadDone?.Invoke(this, EventArgs.Empty);
+			ProcessResult();
 		}
 
 		private string AquireText(string strURL, string javascriptCode)
 		{
-			// Create an instance of IE browser 
-			IE browser = new IE(strURL);
+			//Set browser location
+			browser.GoToNoWait(strURL);
 			// Wait for it to load (otherwise we don't have jquery)
 			browser.WaitForComplete();
 			//Get text
-			var result = browser.Eval(javascriptCode);
-			browser.Close();
+			browser.RunScript(javascriptCode);
+			var result = browser.Text;
 			return result;
 		}
 
-		protected abstract void ProcessResult(object sender, EventArgs e);
+		protected abstract void ProcessResult();
+
+		protected void CleanUpBrowser()
+		{
+			browser.Close();
+		}
 	}
 }

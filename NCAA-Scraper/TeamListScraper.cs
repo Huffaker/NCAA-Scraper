@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using NCAA_Scraper.Models;
 using Newtonsoft.Json;
 
@@ -10,17 +9,29 @@ namespace NCAA_Scraper
 {
 	public class TeamListScraper : Scraper
 	{
+		public List<TeamModel> TeamList { get; private set; } 
 		public TeamListScraper()
 		{
-			url = "http://stats.ncaa.org/team/inst_team_list?academic_year=2016&conf_id=-1&division=1&sport_code=MBB";
-			javascriptCode = @"var results = [];var runLoop = function(){$($('table')[0]).find('tr a').each(function(index, i) {results.push({teamId:$(i).attr('href').split('/')[2],teamName: $(i).text()});});return results;};JSON.stringify(runLoop());";
+
+			javascriptCode = @"
+var results = [];
+var runLoop = function(){
+	$($('table')[0]).find('tr a').each(function(index, i) {
+		results.push({
+			teamId:$(i).attr('href').split('/')[2],
+			teamName: $(i).text()});
+		});return results;
+	};
+$('html').html(JSON.stringify(runLoop()));";
+
+			var url = "http://stats.ncaa.org/team/inst_team_list?academic_year=2016&conf_id=-1&division=1&sport_code=MBB";
+			RunScrap(url);
+			CleanUpBrowser();
 		}
 
-		protected override void ProcessResult(object sender, EventArgs e)
+		protected override void ProcessResult()
 		{
-			var result = JsonConvert.DeserializeObject<List<TeamModel>>(scrapResult);
-			var playerScraper = new PlayerListScraper(result);
-			playerScraper.RunScrap();
-        }
+			TeamList = JsonConvert.DeserializeObject<List<TeamModel>>(scrapResult);
+		}
     }
 }

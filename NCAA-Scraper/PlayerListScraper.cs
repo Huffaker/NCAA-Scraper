@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using NCAA_Scraper.Models;
 using Newtonsoft.Json;
 
@@ -10,37 +9,53 @@ namespace NCAA_Scraper
 {
 	public class PlayerListScraper : Scraper
 	{
-		private List<TeamModel> _teamList; 
-		private List<PlayerModel> _playerList;
-		private int TeamIndex = 0;
-		private int YearIndex = 0;
-		 
-		public PlayerListScraper(List<TeamModel> teamList)
-		{
-			_teamList = teamList;
-			if (_teamList.Count == 0)
-				throw new Exception("No Teams Provided");
+		private readonly int _teamId;
+		private readonly int _yearCode;
+		public List<PlayerModel> PlayerList { get; }
 
-			url = "http://stats.ncaa.org/team/" + _teamList[TeamIndex].TeamID + "/stats/" + Program.YearList[YearIndex].YearCode;
-			javascriptCode = "var results = [];var runLoop = function() {$($('tbody')[1]).find('a').each(function(index, i) {results.push({ PlayerID: $(i).attr('href').split('stats_player_seq=')[1], PlayerName: $(i).text() });});return results;};JSON.stringify(runLoop());";
+		public PlayerListScraper(IEnumerable<TeamModel> teamList, IEnumerable<YearModel> yearCodes)
+		{
+			javascriptCode = @"
+var results = [];
+var runLoop = function() {
+	$($('tbody')[1]).find('a').each(function(index, i) {
+		results.push({ 
+			PlayerID: $(i).attr('href').split('stats_player_seq=')[1], 
+			PlayerName: $(i).text() });
+		});
+	return results;
+};
+$('html').html(JSON.stringify(runLoop()));";
+
+			PlayerList = new List<PlayerModel>();
+            foreach (var yearCode in yearCodes.Take(1))
+			{
+				foreach (var team in teamList.Take(3))
+				{
+					var url = "http://stats.ncaa.org/team/" + team.TeamID + "/stats/" + yearCode.YearCode;
+					_teamId = team.TeamID;
+					_yearCode = yearCode.YearCode;
+					RunScrap(url);
+				}
+			}
+			CleanUpBrowser();
 		}
 
-		public void LoadPlayer(string teamID, string yearCode)
+		protected override void ProcessResult()
 		{
-			url = "http://stats.ncaa.org/team/" + teamID + "/stats/" + yearCode;
-		}
-        protected override void ProcessResult(object sender, EventArgs e)
-		{
+			if (scrapResult == null)
+			{
+				return;
+			}
 			var result = JsonConvert.DeserializeObject<List<PlayerModel>>(scrapResult);
-	        if (result == null)
-		        return;
-	        foreach (var player in result)
-	        {
-		        player.YearCode = Program.YearList[YearIndex].YearCode;
-		        player.TeamID = _teamList[TeamIndex].TeamID;
-	        }
-			_playerList.AddRange(result);
-
+			if (result == null)
+				return;
+			foreach (var player in result)
+			{
+				player.YearCode = _yearCode;
+				player.TeamID = _teamId;
+			}
+			PlayerList.AddRange(result);
 		}
 	}
 }
