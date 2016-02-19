@@ -20,13 +20,21 @@ var runLoop = function(){
 		results.push({
 			teamId:$(i).attr('href').split('/')[2],
 			teamName: $(i).text()});
-		});return results;
+		});
+		return results;
 	};
-$('html').html(JSON.stringify(runLoop()));";
+return JSON.stringify(runLoop());";
 
-			var url = "http://stats.ncaa.org/team/inst_team_list?academic_year=2016&conf_id=-1&division=1&sport_code=MBB";
-			RunScrap(url);
-			CleanUpBrowser();
+			const string url = "http://stats.ncaa.org/team/inst_team_list?academic_year=2016&conf_id=-1&division=1&sport_code=MBB";
+
+			try
+			{
+				RunScrap(url);
+			}
+			finally
+			{
+				CleanUpBrowser();
+			}
 		}
 
 		protected override void ProcessResult()

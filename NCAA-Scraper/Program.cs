@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,7 +11,6 @@ namespace NCAA_Scraper
 {
 	class Program
 	{
-		[STAThread]
 		static void Main(string[] args)
 		{
 			var teamScraper = new TeamListScraper();
@@ -19,7 +19,6 @@ namespace NCAA_Scraper
 			var playerScraper = new PlayerListScraper(teamList, YearList);
 			var playerList = playerScraper.PlayerList;
 
-			
 
 		}
 

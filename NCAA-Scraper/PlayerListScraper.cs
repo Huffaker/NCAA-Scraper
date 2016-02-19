@@ -25,20 +25,26 @@ var runLoop = function() {
 		});
 	return results;
 };
-$('html').html(JSON.stringify(runLoop()));";
+return JSON.stringify(runLoop());";
 
-			PlayerList = new List<PlayerModel>();
-            foreach (var yearCode in yearCodes.Take(1))
+			try
 			{
-				foreach (var team in teamList.Take(3))
+				PlayerList = new List<PlayerModel>();
+				foreach (var yearCode in yearCodes.Take(1))
 				{
-					var url = "http://stats.ncaa.org/team/" + team.TeamID + "/stats/" + yearCode.YearCode;
-					_teamId = team.TeamID;
-					_yearCode = yearCode.YearCode;
-					RunScrap(url);
+					foreach (var team in teamList.Take(100))
+					{
+						var url = "http://stats.ncaa.org/team/" + team.TeamID + "/stats/" + yearCode.YearCode;
+						_teamId = team.TeamID;
+						_yearCode = yearCode.YearCode;
+						RunScrap(url);
+					}
 				}
 			}
-			CleanUpBrowser();
+			finally
+			{
+				CleanUpBrowser();
+			}
 		}
 
 		protected override void ProcessResult()
