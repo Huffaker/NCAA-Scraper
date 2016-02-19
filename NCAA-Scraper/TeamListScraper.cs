@@ -16,7 +16,7 @@ namespace NCAA_Scraper
 			javascriptCode = @"
 var results = [];
 var runLoop = function(){
-	$($('table')[0]).find('tr a').each(function(index, i) {
+	$('table').eq(0).find('tr a').each(function(index, i) {
 		results.push({
 			teamId:$(i).attr('href').split('/')[2],
 			teamName: $(i).text()});
