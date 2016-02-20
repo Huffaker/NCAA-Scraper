@@ -12,8 +12,8 @@ namespace NCAA_Scraper
 	{
 		protected string scrapResult { get; set; }
 		protected string javascriptCode { get; set; }
-		//private IE browser;
 		private PhantomJS browser;
+		private int count = 0;
 
 		public void RunScrap(string url)
 		{
@@ -21,7 +21,7 @@ namespace NCAA_Scraper
 			if (browser == null)
 				browser = new PhantomJS();
 			scrapResult = AquireText(url, javascriptCode);
-			ProcessResult();
+			ProcessResult(url);
 		}
 
 		private string AquireText(string strURL, string javascriptCode)
@@ -48,11 +48,17 @@ page.open('" + strURL + @"', function(status) {
 			}
 		}
 
-		protected abstract void ProcessResult();
+		protected abstract void ProcessResult(string url);
 
 		protected void CleanUpBrowser()
 		{
 			browser.Abort();
+		}
+
+		protected void LogResult(string url, int results)
+		{
+			count++;
+            Console.WriteLine(DateTime.Now.ToShortTimeString() + " - URL: " + url + " - Data:" + results + ", Count: " + count);
 		}
 	}
 }

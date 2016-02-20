@@ -32,7 +32,7 @@ return JSON.stringify(runLoop());";
 				PlayerList = new List<PlayerModel>();
 				foreach (var yearCode in yearCodes.Take(1))
 				{
-					foreach (var team in teamList.Take(100))
+					foreach (var team in teamList.Take(5))
 					{
 						var url = "http://stats.ncaa.org/team/" + team.TeamID + "/stats/" + yearCode.YearCode;
 						_teamId = team.TeamID;
@@ -47,21 +47,26 @@ return JSON.stringify(runLoop());";
 			}
 		}
 
-		protected override void ProcessResult()
+		protected override void ProcessResult(string url)
 		{
 			if (scrapResult == null)
 			{
-				return;
+				LogResult(url, 0);
+                return;
 			}
 			var result = JsonConvert.DeserializeObject<List<PlayerModel>>(scrapResult);
 			if (result == null)
+			{
+				LogResult(url, 0);
 				return;
+			}
 			foreach (var player in result)
 			{
 				player.YearCode = _yearCode;
 				player.TeamID = _teamId;
 			}
 			PlayerList.AddRange(result);
+			LogResult(url, result.Count);
 		}
 	}
 }

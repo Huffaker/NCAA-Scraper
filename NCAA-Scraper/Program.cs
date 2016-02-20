@@ -19,7 +19,10 @@ namespace NCAA_Scraper
 			var playerScraper = new PlayerListScraper(teamList, YearList);
 			var playerList = playerScraper.PlayerList;
 
+			var gameScrpaer = new GameListScraper(playerList);
+			var games = gameScrpaer.GameList;
 
+			Console.ReadLine();
 		}
 
 		//Comment out the seasons you don't need

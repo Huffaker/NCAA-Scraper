@@ -37,9 +37,10 @@ return JSON.stringify(runLoop());";
 			}
 		}
 
-		protected override void ProcessResult()
+		protected override void ProcessResult(string url)
 		{
 			TeamList = JsonConvert.DeserializeObject<List<TeamModel>>(scrapResult);
+			LogResult(url, TeamList.Count);
 		}
     }
 }

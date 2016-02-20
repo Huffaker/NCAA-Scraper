@@ -11,6 +11,7 @@ namespace NCAA_Scraper.Models
 		public int TeamID { get; set; }
 		public int OpponentTeamID { get; set; }
 		public DateTime GameDate { get; set; }
+		public int YearCode { get; set; }
 		public bool WasHomeGame { get; set; }
 		public bool Win { get; set; }
 		public int TeamPoints { get; set; }
