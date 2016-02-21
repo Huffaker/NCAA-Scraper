@@ -98,7 +98,7 @@ END
 GO
 
 GO
-CREATE PROCEDURE STG.pMergePlayers AS
+CREATE PROCEDURE [STG].[pMergePlayers] AS
 BEGIN
 
 MERGE dbo.Players AS target
@@ -112,15 +112,22 @@ WHEN NOT MATCHED BY target THEN INSERT
       ,[TeamID]
       ,[YearCode]
       ,[PlayerPosition]
-      ,[PlayerYear])
+      ,[PlayerYear]
+	  ,[PlayerHeight]
+      ,[GamesPlayed]
+      ,[GamesStarted])
 	VALUES(
 	source.[PlayerID]
       ,source.[PlayerName]
       ,source.[TeamID]
       ,source.[YearCode]
       ,source.[PlayerPosition]
-      ,source.[PlayerYear]);
+      ,source.[PlayerYear]
+	  ,source.[PlayerHeight]
+      ,source.[GamesPlayed]
+      ,source.[GamesStarted]);
 END
+
 GO
 
 GO

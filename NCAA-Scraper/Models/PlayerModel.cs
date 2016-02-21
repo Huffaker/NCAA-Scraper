@@ -14,5 +14,8 @@ namespace NCAA_Scraper.Models
 		public int YearCode { get; set; }
 		public string PlayerPosition { get; set; }
 		public string PlayerYear { get; set; }
+		public string PlayerHeight { get; set; }
+		public int? GamesPlayed { get; set; }
+		public int? GamesStarted { get; set; }
     }
 }

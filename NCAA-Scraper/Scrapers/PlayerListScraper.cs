@@ -24,6 +24,9 @@ var runLoop = function() {
 			PlayerName: $(i).text(),
 			PlayerPosition: $(i).closest('tr').find('td').eq(3).text(),
 			PlayerYear: $(i).closest('tr').find('td').eq(2).text(),
+			PlayerHeight: $(i).closest('tr').find('td').eq(4).text(),
+			GamesPlayed: $(i).closest('tr').find('td').eq(5).text().replace(/[^0-9.]/g,''),
+			GamesStarted: $(i).closest('tr').find('td').eq(6).text().replace(/[^0-9.]/g,''),
 		});
 	});
 	return results;
@@ -36,7 +39,7 @@ return JSON.stringify(runLoop());";
 				PlayerList = new List<PlayerModel>();
 				foreach (var yearCode in yearCodes)
 				{
-					foreach (var team in teamList)
+					foreach (var team in teamList.Take(1))
 					{
 						var url = "http://stats.ncaa.org/team/" + team.TeamID + "/stats/" + yearCode.YearCode;
 						_teamId = team.TeamID;
