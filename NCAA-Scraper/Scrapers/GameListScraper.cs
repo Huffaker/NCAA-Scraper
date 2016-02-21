@@ -13,7 +13,7 @@ namespace NCAA_Scraper
 		private readonly PlayerModel _player;
 		public List<GameModel> GameList { get; private set; }
 		
-		public GameListScraper(IEnumerable<PlayerModel> playerList)
+		public GameListScraper(List<PlayerModel> playerList)
 		{
 
 			javascriptCode = @"
@@ -49,7 +49,8 @@ var runLoop = function() {
 };
 return JSON.stringify(runLoop());";
 
-			try
+			totalCalls = playerList.Count();
+            try
 			{
 				GameList = new List<GameModel>();
 				foreach (var player in playerList)
@@ -87,6 +88,14 @@ return JSON.stringify(runLoop());";
 			}
 			GameList.AddRange(result);
 			LogResult(url, result.Count);
+
+			//Save as we go in chunks, just in case it all crashes
+			if (GameList.Count > 100)
+			{
+				BulkInsert.LoadGames(GameList, Program.ConnectionString);
+				GameList.Clear();
+			}
+
 		}
 	}
 }

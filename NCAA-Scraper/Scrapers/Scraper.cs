@@ -14,10 +14,11 @@ namespace NCAA_Scraper
 		protected string javascriptCode { get; set; }
 		private PhantomJS browser;
 		private int count = 0;
+		protected int totalCalls = 0;
 
 		public void RunScrap(string url)
 		{
-			// Create an instance of IE browser 
+			// Create an instance of Phantom browser 
 			if (browser == null)
 				browser = new PhantomJS();
 			scrapResult = AquireText(url, javascriptCode);
@@ -58,7 +59,7 @@ page.open('" + strURL + @"', function(status) {
 		protected void LogResult(string url, int results)
 		{
 			count++;
-            Console.WriteLine(DateTime.Now.ToShortTimeString() + " - URL: " + url + " - Data:" + results + ", Count: " + count);
+            Console.WriteLine(DateTime.Now.ToLongTimeString() + ", URL: " + url + ", Data: " + results + ", Count: " + count + "/" + totalCalls);
 		}
 	}
 }

@@ -51,16 +51,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameListScraper.cs" />
+    <Compile Include="BulkInsert.cs" />
+    <Compile Include="Scrapers\GameListScraper.cs" />
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Models\PlayerModel.cs" />
     <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Models\YearModel.cs" />
-    <Compile Include="PlayerListScraper.cs" />
+    <Compile Include="Scrapers\PlayerListScraper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scraper.cs" />
-    <Compile Include="TeamListScraper.cs" />
+    <Compile Include="Scrapers\Scraper.cs" />
+    <Compile Include="Scrapers\TeamListScraper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -71,6 +72,7 @@
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="DatabaseScripts.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,7 +13,7 @@ namespace NCAA_Scraper
 		private readonly int _yearCode;
 		public List<PlayerModel> PlayerList { get; }
 
-		public PlayerListScraper(IEnumerable<TeamModel> teamList, IEnumerable<YearModel> yearCodes)
+		public PlayerListScraper(List<TeamModel> teamList, List<YearModel> yearCodes)
 		{
 			javascriptCode = @"
 var results = [];
@@ -21,18 +21,22 @@ var runLoop = function() {
 	$('tbody').eq(1).find('a').each(function(index, i) {
 		results.push({ 
 			PlayerID: $(i).attr('href').split('stats_player_seq=')[1], 
-			PlayerName: $(i).text() });
+			PlayerName: $(i).text(),
+			PlayerPosition: $(i).closest('tr').find('td').eq(3).text(),
+			PlayerYear: $(i).closest('tr').find('td').eq(2).text(),
 		});
+	});
 	return results;
 };
 return JSON.stringify(runLoop());";
 
-			try
+			totalCalls = teamList.Count() * yearCodes.Count();
+            try
 			{
 				PlayerList = new List<PlayerModel>();
-				foreach (var yearCode in yearCodes.Take(1))
+				foreach (var yearCode in yearCodes)
 				{
-					foreach (var team in teamList.Take(5))
+					foreach (var team in teamList)
 					{
 						var url = "http://stats.ncaa.org/team/" + team.TeamID + "/stats/" + yearCode.YearCode;
 						_teamId = team.TeamID;

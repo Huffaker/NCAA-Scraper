@@ -26,7 +26,7 @@ var runLoop = function(){
 return JSON.stringify(runLoop());";
 
 			const string url = "http://stats.ncaa.org/team/inst_team_list?academic_year=2016&conf_id=-1&division=1&sport_code=MBB";
-
+			totalCalls = 1;
 			try
 			{
 				RunScrap(url);
