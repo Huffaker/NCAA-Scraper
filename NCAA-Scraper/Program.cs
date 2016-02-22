@@ -18,7 +18,7 @@ namespace NCAA_Scraper
 			BulkInsert.LoadTeams(teamList, ConnectionString);
 
 			var playerScraper = new PlayerListScraper(teamList, YearList);
-			var playerList = playerScraper.PlayerList;
+			var playerList = playerScraper.PlayerList.OrderBy(x=> x.YearCode).ThenBy(x=> x.PlayerID).ToList();
 			BulkInsert.LoadPlayers(playerList, ConnectionString);
 
 			var gameScrpaer = new GameListScraper(playerList);

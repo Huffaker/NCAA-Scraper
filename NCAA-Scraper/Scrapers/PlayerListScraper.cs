@@ -39,7 +39,7 @@ return JSON.stringify(runLoop());";
 				PlayerList = new List<PlayerModel>();
 				foreach (var yearCode in yearCodes)
 				{
-					foreach (var team in teamList.Take(1))
+					foreach (var team in teamList)
 					{
 						var url = "http://stats.ncaa.org/team/" + team.TeamID + "/stats/" + yearCode.YearCode;
 						_teamId = team.TeamID;
