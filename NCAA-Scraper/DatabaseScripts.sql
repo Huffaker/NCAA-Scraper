@@ -13,7 +13,10 @@ CREATE TABLE STG.Players (
 	TeamID INT NOT NULL,
 	YearCode INT NOT NULL,
 	PlayerPosition NVARCHAR(10) NULL,
-	PlayerYear NVARCHAR(10) NULL
+	PlayerYear NVARCHAR(10) NULL,
+	[PlayerHeight] NVARCHAR(10) NULL,
+    [GamesPlayed] INT NULL,
+    [GamesStarted] INT NULL
 )
 
 CREATE TABLE STG.Games (
@@ -54,7 +57,10 @@ CREATE TABLE dbo.Players (
 	TeamID INT NOT NULL,
 	YearCode INT NOT NULL,
 	PlayerPosition NVARCHAR(10) NULL,
-	PlayerYear NVARCHAR(10) NULL
+	PlayerYear NVARCHAR(10) NULL,
+	[PlayerHeight] NVARCHAR(10) NULL,
+    [GamesPlayed] INT NULL,
+    [GamesStarted] INT NULL
 )
 
 CREATE TABLE dbo.Games (
