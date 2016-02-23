@@ -68,6 +68,41 @@ namespace NCAA_Scraper
 			}
 		}
 
+		public static List<PlayerModel> ReadPlayers(string connectionString)
+		{
+			var playerList = new List<PlayerModel>();
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				try {
+					//Clear data from staging table
+					var sqlTrunc = "SELECT * FROM dbo.RemainingPlayerList";
+					var cmdTrunc = new SqlCommand(sqlTrunc, connection);
+					using (var reader = cmdTrunc.ExecuteReader(CommandBehavior.Default))
+					{
+						while (reader.Read())
+						{
+							var player = new PlayerModel
+							{
+								PlayerID = reader.GetInt32(0),
+								PlayerName = reader.GetString(1),
+								TeamID = reader.GetInt32(2),
+								YearCode = reader.GetInt32(3)
+								//No need to read remaining fields
+							};
+							playerList.Add(player);
+						}
+					}
+					connection.Close();
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+				}
+			}
+			return playerList.Where(x=> Program.YearList.Any(a=> a.YearCode == x.YearCode)).ToList();
+		}
+
 		public static DataTable ToDataTable<T>(List<T> items)
 		{
 			var dataTable = new DataTable(typeof(T).Name);

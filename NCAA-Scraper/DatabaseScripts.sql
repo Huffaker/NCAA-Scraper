@@ -199,3 +199,36 @@ WHEN NOT MATCHED BY target THEN INSERT
       ,source.[Fouls]);
 END
 GO
+
+CREATE VIEW dbo.RemainingPlayerList AS
+
+SELECT 
+	P.PlayerID
+	,P.PlayerName
+	,P.TeamID
+	,P.YearCode
+	,P.PlayerPosition
+	,P.PlayerYear
+	,P.PlayerHeight
+	,P.GamesPlayed
+	,P.GamesStarted
+FROM dbo.Players P
+LEFT JOIN(SELECT DISTINCT PlayerID, YearCode FROM dbo.Games) G ON G.[PlayerID] = P.PlayerID AND G.[YearCode] = P.[YearCode]
+WHERE G.PlayerID IS NULL
+GO
+
+CREATE TABLE dbo.Seasons(
+	YearCode INT NOT NULL,
+	Season NVARCHAR(25) NOT NULL,
+)
+--Sead the season table
+INSERT INTO dbo.Seasons
+(YearCode, Season)
+VALUES
+(12260, '2015-2016'),
+(12020, '2014-2015'),
+(11540, '2013-2014'),
+(11220, '2012-2013'),
+(10740, '2011-2012'),
+(10440, '2010-2011'),
+(10260, '2009-2010')

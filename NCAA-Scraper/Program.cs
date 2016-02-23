@@ -13,14 +13,21 @@ namespace NCAA_Scraper
 	{
 		static void Main(string[] args)
 		{
-			var teamScraper = new TeamListScraper();
-			var teamList = teamScraper.TeamList;
-			BulkInsert.LoadTeams(teamList, ConnectionString);
+			//Check for existing data (Useful for recoving from a crash, skips to only players without data)
+			var playerList = BulkInsert.ReadPlayers(ConnectionString);
+			if (playerList.Count == 0 || !RecoveryMode)
+			{
+				//Get team list
+				var teamScraper = new TeamListScraper();
+				var teamList = teamScraper.TeamList;
+				BulkInsert.LoadTeams(teamList, ConnectionString);
 
-			var playerScraper = new PlayerListScraper(teamList, YearList);
-			var playerList = playerScraper.PlayerList.OrderBy(x=> x.YearCode).ThenBy(x=> x.PlayerID).ToList();
-			BulkInsert.LoadPlayers(playerList, ConnectionString);
-
+				//Get list of players for every team
+				var playerScraper = new PlayerListScraper(teamList, YearList);
+				playerList = playerScraper.PlayerList.OrderBy(x => x.YearCode).ThenBy(x => x.PlayerID).ToList();
+				BulkInsert.LoadPlayers(playerList, ConnectionString);
+			}
+			//Begin pulling game data
 			var gameScrpaer = new GameListScraper(playerList);
 			var games = gameScrpaer.GameList;
 			BulkInsert.LoadGames(games, ConnectionString);
@@ -37,7 +44,7 @@ namespace NCAA_Scraper
 		//Comment out the seasons you don't want to pull
 		public static List<YearModel> YearList = new List<YearModel>
 		{
-			new YearModel() {YearCode = 12260, SeasonName = "2015-2016"},
+			  new YearModel() {YearCode = 12260, SeasonName = "2015-2016"},
 			//new YearModel() {YearCode = 12020, SeasonName = "2014-2015"},
 			//new YearModel() {YearCode = 11540, SeasonName = "2013-2014"},
 			//new YearModel() {YearCode = 11220, SeasonName = "2012-2013"},
@@ -45,5 +52,8 @@ namespace NCAA_Scraper
 			//new YearModel() {YearCode = 10440, SeasonName = "2010-2011"},
 			//new YearModel() {YearCode = 10260, SeasonName = "2009-2010"}
 		};
+
+		//Set this flag if you are attempting to reboot the program after a crash
+		const bool RecoveryMode = false;
 	}
 }
