@@ -33,19 +33,16 @@ var runLoop = function() {
 };
 return JSON.stringify(runLoop());";
 
-			totalCalls = teamList.Count() * yearCodes.Count();
+			totalCalls = teamList.Count();
             try
 			{
 				PlayerList = new List<PlayerModel>();
-				foreach (var yearCode in yearCodes)
+				foreach (var team in teamList)
 				{
-					foreach (var team in teamList)
-					{
-						var url = "http://stats.ncaa.org/team/" + team.TeamID + "/stats/" + yearCode.YearCode;
-						_teamId = team.TeamID;
-						_yearCode = yearCode.YearCode;
-						RunScrap(url);
-					}
+					var url = "http://stats.ncaa.org/team/" + team.TeamID + "/stats/" + team.YearCode;
+					_teamId = team.TeamID;
+					_yearCode = team.YearCode;
+					RunScrap(url);
 				}
 			}
 			finally

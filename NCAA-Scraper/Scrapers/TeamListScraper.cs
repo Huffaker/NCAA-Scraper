@@ -9,7 +9,8 @@ namespace NCAA_Scraper
 {
 	public class TeamListScraper : Scraper
 	{
-		public List<TeamModel> TeamList { get; private set; } 
+		public List<TeamModel> TeamList { get; private set; }
+		private readonly int _yearCode;
 		public TeamListScraper()
 		{
 
@@ -25,11 +26,15 @@ var runLoop = function(){
 	};
 return JSON.stringify(runLoop());";
 
-			const string url = "http://stats.ncaa.org/team/inst_team_list?academic_year=2016&conf_id=-1&division=1&sport_code=MBB";
-			totalCalls = 1;
+			TeamList = new List<TeamModel>();
+			totalCalls = Program.YearList.Count;
 			try
 			{
-				RunScrap(url);
+				foreach (var year in Program.YearList)
+				{
+					_yearCode = year.YearCode;
+					RunScrap("http://stats.ncaa.org/team/inst_team_list?academic_year=" + year.YearID +"&conf_id=-1&division=1&sport_code=MBB");
+				}
 			}
 			finally
 			{
@@ -39,8 +44,23 @@ return JSON.stringify(runLoop());";
 
 		protected override void ProcessResult(string url)
 		{
-			TeamList = JsonConvert.DeserializeObject<List<TeamModel>>(scrapResult);
-			LogResult(url, TeamList.Count);
+			if (scrapResult == null)
+			{
+				LogResult(url, 0);
+				return;
+			}
+			var result = JsonConvert.DeserializeObject<List<TeamModel>>(scrapResult);
+			if (result == null)
+			{
+				LogResult(url, 0);
+				return;
+			}
+			foreach (var team in result)
+			{
+				team.YearCode = _yearCode;
+			}
+			TeamList.AddRange(result);
+			LogResult(url, result.Count);
 		}
     }
 }

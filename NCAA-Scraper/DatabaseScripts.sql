@@ -4,7 +4,8 @@ GO
 
 CREATE TABLE STG.Teams (
 	TeamID INT NOT NULL,
-	TeamName NVARCHAR(125) NOT NULL
+	TeamName NVARCHAR(125) NOT NULL,
+	YearCode INT NOT NULL,
 )
 
 CREATE TABLE STG.Players (
@@ -48,7 +49,8 @@ CREATE TABLE STG.Games (
 
 CREATE TABLE dbo.Teams (
 	TeamID INT NOT NULL,
-	TeamName NVARCHAR(125) NOT NULL
+	TeamName NVARCHAR(125) NOT NULL,
+	YearCode INT NOT NULL
 )
 
 CREATE TABLE dbo.Players (
@@ -96,10 +98,10 @@ BEGIN
 
 MERGE dbo.Teams AS target
 USING STG.Teams AS source
-	ON (target.[TeamID] = source.[TeamID])
+	ON (target.[TeamID] = source.[TeamID] AND target.YearCode = source.YearCode)
 WHEN NOT MATCHED BY target THEN INSERT
-	(TeamID, TeamName)
-	VALUES(source.TeamID, source.TeamName);
+	(TeamID, TeamName, YearCode)
+	VALUES(source.TeamID, source.TeamName, source.YearCode);
 END
 GO
 

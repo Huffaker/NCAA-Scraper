@@ -10,5 +10,6 @@ namespace NCAA_Scraper.Models
 	{
 		public int YearCode { get; set; }
 		public string SeasonName { get; set; }
+		public int YearID { get; set; }
 	}
 }
