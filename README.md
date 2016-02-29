@@ -12,3 +12,7 @@ Currently, the application is setup to pull player performance per individual ga
 * Create a new database and update the connection string in Program.cs
 * Run the file DatabaseScripts.sql against the new database to create the tables and procedures.
 * Run the project!
+
+#### Quick Note on Screen Scrapping:
+------
+The project is currently set up to hit the stats site one request at a time and waits until the request is returned. This works out to be about 5 requests a minute, not fast, but not damaging to their site. Please keep in mind that increasing the speed of the application could harm the server performance for other users and get you in a bit of trouble.
