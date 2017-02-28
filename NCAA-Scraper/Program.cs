@@ -23,7 +23,7 @@ namespace NCAA_Scraper
 				BulkInsert.LoadTeams(teamList, ConnectionString);
 
 				//Get list of players for every team
-				var playerScraper = new PlayerListScraper(teamList, YearList);
+				var playerScraper = new PlayerListScraper(teamList);
 				playerList = playerScraper.PlayerList.OrderBy(x => x.YearCode).ThenBy(x => x.PlayerID).ToList();
 				BulkInsert.LoadPlayers(playerList, ConnectionString);
 			}
@@ -36,15 +36,16 @@ namespace NCAA_Scraper
 			Console.ReadLine();
 		}
 
-		//SQL Database Connection String
-		public static readonly string ConnectionString = "Data Source = (localdb)\\mssqllocaldb; " +
-		" Integrated Security=true;" +
-		"Initial Catalog=NCAAStats;";
+        //SQL Database Connection String
+        public static readonly string ConnectionString = "Data Source = (localdb)\\mssqllocaldb; " +
+        " Integrated Security=true;" +
+        "Initial Catalog=NCAAStats;";
 
-		//Comment out the seasons you don't want to pull
-		public static List<YearModel> YearList = new List<YearModel>
+        //Comment out the seasons you don't want to pull
+        public static List<YearModel> YearList = new List<YearModel>
 		{
-			  new YearModel() {YearCode = 12260, SeasonName = "2015-2016"},
+            new YearModel() {YearCode = 12480, SeasonName = "2016-2017"},
+			//new YearModel() {YearCode = 12260, SeasonName = "2015-2016"},
 			//new YearModel() {YearCode = 12020, SeasonName = "2014-2015"},
 			//new YearModel() {YearCode = 11540, SeasonName = "2013-2014"},
 			//new YearModel() {YearCode = 11220, SeasonName = "2012-2013"},

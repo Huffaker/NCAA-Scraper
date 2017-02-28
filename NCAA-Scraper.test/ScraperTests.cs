@@ -27,9 +27,8 @@ namespace NCAA_Scraper.test
 		public void PlayerScrapPullsData()
 		{
 			//Initialize
-			var teamList = new List<TeamModel> {new TeamModel {TeamID = 2, TeamName = "Abilene Christian" } };
-			var yearList = new List<YearModel> {new YearModel {YearCode = 12260, SeasonName = "2015-2016"}};
-            var playerScraper = new PlayerListScraper(teamList, yearList);
+			var teamList = new List<TeamModel> {new TeamModel {TeamID = 2, TeamName = "Abilene Christian", YearCode = 12260 } };
+            var playerScraper = new PlayerListScraper(teamList);
 			var playerList = playerScraper.PlayerList;
 			//Assert
 			Assert.IsNotNull(playerList);
@@ -41,9 +40,9 @@ namespace NCAA_Scraper.test
 		public void GameScrapPullsData()
 		{
 			//Initialize
-			var playerList = new List<PlayerModel> {new PlayerModel { TeamID = 26172, PlayerID = 1737699, YearCode = 12260 } };
-			var gameScrpaer = new GameListScraper(playerList);
-			var games = gameScrpaer.GameList;
+			var playerList = new List<PlayerModel> {new PlayerModel { TeamID = 26172, PlayerID = 1620841, YearCode = 12260 } };
+			var gameScraper = new GameListScraper(playerList);
+			var games = gameScraper.GameList;
 			//Assert
 			Assert.IsNotNull(games);
 			Assert.IsTrue(games.Count > 0);

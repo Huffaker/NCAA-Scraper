@@ -13,7 +13,7 @@ namespace NCAA_Scraper
 		private readonly int _yearCode;
 		public List<PlayerModel> PlayerList { get; }
 
-		public PlayerListScraper(List<TeamModel> teamList, List<YearModel> yearCodes)
+		public PlayerListScraper(List<TeamModel> teamList)
 		{
 			javascriptCode = @"
 var results = [];
