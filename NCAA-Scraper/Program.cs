@@ -44,7 +44,8 @@ namespace NCAA_Scraper
         //Comment out the seasons you don't want to pull
         public static List<YearModel> YearList = new List<YearModel>
 		{
-            new YearModel() {YearCode = 12480, SeasonName = "2016-2017"},
+            new YearModel() {YearCode = 12620, SeasonName = "2017-2018"},
+            //new YearModel() {YearCode = 12480, SeasonName = "2016-2017"},
 			//new YearModel() {YearCode = 12260, SeasonName = "2015-2016"},
 			//new YearModel() {YearCode = 12020, SeasonName = "2014-2015"},
 			//new YearModel() {YearCode = 11540, SeasonName = "2013-2014"},
